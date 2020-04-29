@@ -1,2 +1,8 @@
-import './index.css'
-alert('a2')
+import Vue from 'vue';
+import App from './App.vue';
+import _ from 'lodash';
+
+new Vue({
+  el:'#root',
+  render: h => h(App)
+})
