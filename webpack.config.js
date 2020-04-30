@@ -62,16 +62,36 @@
         })
       },
       {
+        test:/\.scss$/,
+        use:_ExtractTextPlugin.extract({
+          fallback:"style-loader",
+          use:[{
+            loader:"css-loader",
+            options:{//关键代码 抽离对应css
+              modules:false
+            },
+          },
+          "sass-loader"
+        ]
+        })
+      },
+      {
+        test:/\.less$/,
+        use:_ExtractTextPlugin.extract({
+          fallback:"style-loader",
+          use:[{
+            loader:"css-loader",
+            options:{//关键代码 抽离对应css
+              modules:false
+            },
+          },"less-loader"]
+        })
+      },
+      {
         test:/\.js$/,
         exclude: /(node_modules)/,
         use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              '@babel/preset-env',
-              '@babel/preset-react'
-            ]
-          }
+          loader: 'babel-loader'
         }
       },
       {
