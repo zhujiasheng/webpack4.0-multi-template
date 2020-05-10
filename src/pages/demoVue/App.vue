@@ -1,5 +1,7 @@
 <template>
-  <div>{{mess}}</div>
+  <div class="multi-box">
+    {{message}}
+  </div>
 </template>
 
 <script>
@@ -7,7 +9,7 @@ export default {
   name:'App',
   data () {
     return {
-      mess:'hello word'
+      message:'demo-vue'
     }
   }
 }

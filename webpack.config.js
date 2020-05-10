@@ -5,6 +5,8 @@
   const {CleanWebpackPlugin} = require('clean-webpack-plugin');
   const ExtractTextPlugin = require("extract-text-webpack-plugin");
   const VueLoaderPlugin = require('vue-loader/lib/plugin');
+  const CopyWebpackPlugin = require('copy-webpack-plugin');
+
   const htmlDIR = './src/html';
   const pagesDIR = './src/pages';
   let entry = {},output = {},plugins = [],_module = {};
@@ -12,7 +14,7 @@
     return it.split(".")[0];
   })
   const _ExtractTextPlugin = new ExtractTextPlugin({
-    filename:'[name].min.css',//坑这里写成了.js
+    filename:'[name].min.css',
     disable:false
   })
 
@@ -24,8 +26,8 @@
 
   //output
   output = {
-    filename:'[name].js',
-    path:path.resolve(__dirname,'dist')
+    filename:`[name].js?t=${+new Date}`,
+    path:path.resolve(__dirname,'dist'),
   }
 
   //plugins
@@ -34,7 +36,7 @@
       template:`${htmlDIR}/${it}.html`,
       filename:`${it}.html`,
       inject:true,
-      chunks:[`${it}`]
+      chunks:[`${it}`]  
     }));
     return curr;
   },[]);
@@ -42,9 +44,14 @@
   plugins.push(new CleanWebpackPlugin());
   plugins.push(_ExtractTextPlugin);
   plugins.push(new VueLoaderPlugin());
-  plugins.push(new webpack.HotModuleReplacementPlugin({
-    // Options...
-  }))
+  plugins.push(new CopyWebpackPlugin([{
+    from:path.resolve(__dirname,'static'),
+    to:'static',
+    // ignore: ['*.ts', '*.less'],
+  }]))
+  // plugins.push(new webpack.HotModuleReplacementPlugin({
+  //   // Options...
+  // }))
 
   //module
   _module = {
@@ -75,7 +82,7 @@
         ]
         })
       },
-      {
+      { 
         test:/\.less$/,
         use:_ExtractTextPlugin.extract({
           fallback:"style-loader",
@@ -88,7 +95,7 @@
         })
       },
       {
-        test:/\.js$/,
+        test: /\.(js)|(jsx)|(ts)$/,
         exclude: /(node_modules)/,
         use: {
           loader: 'babel-loader'
@@ -96,9 +103,9 @@
       },
       {
         test:/\.vue$/,
-        use:{
-          loader: 'vue-loader'
-        }
+        use:[{
+          loader: 'vue-loader',
+        }]
       }
     ]
   }
@@ -109,6 +116,25 @@
     module:_module,
     plugins
   }
+  
+  config.resolve = {
+    extensions: ['.ts','.tsx','.js','.jsx','.vue','.less','.scss','.css'],
+    alias: {
+      '@': path.resolve(__dirname,'src/'),
+      '@components': path.resolve(__dirname,'src/components'),
+      '@utils': path.resolve(__dirname,'src/utils'),
+      '@pages': path.resolve(__dirname,'src/pages')
+    }
+  }
+
+  // config.resolve = {
+  //   extensions: ['.js','jsx','.vue','.json'],
+  //   alias: {
+  //     '@': resolve('src'),
+  //     '@/components': resolve('src/components'),
+  //     '@/pages': resolve('src/pages')
+  //   }
+  // }
 
   config.optimization = {
     splitChunks:{
@@ -131,8 +157,7 @@
   }
 
   config.devServer = {
-    // contentBase:`${htmlDIR}/`,
-    contentBase:'./dist/',
+    contentBase:`${htmlDIR}/`,
     host:'127.0.0.1',
     port:'8888',
     hot:true,

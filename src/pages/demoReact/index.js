@@ -1,11 +1,11 @@
-import React,{ Component } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
-import $ from 'jquery';
-import _ from 'lodash';
 import './index.less';
 
 function App() {
-  return <div>App</div>
+  return <div class="multi-box">
+    react-app
+  </div>
 }
 
 ReactDOM.render(<App/>,document.querySelector('#root'));
