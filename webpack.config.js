@@ -43,8 +43,7 @@
       inject:true,
       chunks:[`${it}`],
       css:[],
-      js:['js/lodash.js','js/react.js','js/react-dom.js'],
-      webpackjson:'HELLO'
+      js:['js/lodash.js','js/react.js','js/react-dom.js']
     }));
     return curr;
   },[]);
