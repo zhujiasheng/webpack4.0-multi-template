@@ -1,9 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
 import './index.less';
 
+console.log(webp)
 function App() {
-  return <div class="multi-box">
+  return <div className="multi-box">
     react-app
   </div>
 }
