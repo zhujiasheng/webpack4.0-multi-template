@@ -1,6 +1,6 @@
 {
-  "name": "npm-cli-multi",
-  "version": "1.0.1",
+  "name": "@rise/npm-cli-multi",
+  "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
