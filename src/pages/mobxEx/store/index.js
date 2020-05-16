@@ -1,9 +1,9 @@
-import BaseListStore from './baseListStore'
-import CardListStore from './cardListStore'
+import BaseListStore from "./baseListStore";
+import CardListStore from "./cardListStore";
 
 const store = {
   BaseListStore,
-  CardListStore
-}
+  CardListStore,
+};
 
-export default store
+export default store;

@@ -1,16 +1,16 @@
 <template>
   <div class="multi-box">
-    {{message}}
+    {{ message }}
   </div>
 </template>
 
 <script>
 export default {
-  name:'App',
-  data () {
+  name: "App",
+  data() {
     return {
-      message:'demo-vue'
-    }
-  }
-}
+      message: "demo-vue",
+    };
+  },
+};
 </script>
