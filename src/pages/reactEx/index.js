@@ -1,9 +1,7 @@
-import './index.less';
+import "./index.less";
 
 function App() {
-  return <div className="multi-box">
-    react-app
-  </div>
+  return <div className="multi-box">react-app</div>;
 }
 
-ReactDOM.render(<App/>,document.querySelector('#root'));
+ReactDOM.render(<App />, document.querySelector("#root"));
