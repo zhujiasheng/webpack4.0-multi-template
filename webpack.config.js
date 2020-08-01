@@ -32,7 +32,7 @@
     filename:`[name].js?t=${_VERSON}`,
     path:path.resolve(__dirname,'dist'),
     // library: `${'web'}`,
-    // libraryTarget: "umd"
+    // libraryTarget: "commonjs2"
   }
 
   //plugins
