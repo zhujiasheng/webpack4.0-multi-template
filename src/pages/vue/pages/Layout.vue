@@ -4,7 +4,7 @@
       <a-layout-header>
         <a-menu v-model="current" mode="horizontal">
           <a-menu-item key="baseCard">
-            <router-link to="/baseCard">baseCard</router-link>
+            <router-link to="/baseList">baseCard</router-link>
           </a-menu-item>
           <a-menu-item key="cardList">
             <router-link to="/cardList">cardList</router-link>

@@ -7,17 +7,17 @@ const routes = [
   {
     path: "/",
     component: _Layout,
-    redirect: "/baseCard",
+    redirect: "/baseList",
     children: [
       {
-        path: "/baseCard",
+        path: "/baseList",
         component: () =>
-          import(/*webpackChunkName:"baseCard"*/ "../pages/baseCard"),
+          import(/*webpackChunkName:"baseCard"*/ "../pages/baseList"),
       },
       {
         path: "/cardList",
         component: () =>
-          import(/* webpackChunkName:"introduce"*/ "../pages/CardList"),
+          import(/*webpackChunkName:"introduce"*/ "../pages/CardList"),
       },
     ],
   },
