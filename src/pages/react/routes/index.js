@@ -3,9 +3,21 @@ import RLayout from "../pages/RLayout";
 
 const routes = [
   {
+    path: "/login",
+    component: lazy(() =>
+      import(/* webpackChunkName: "baseList"*/ "../pages/Login/index.js")
+    ),
+  },
+  {
     path: "/",
     component: RLayout,
     routes: [
+      {
+        path: "/todolist",
+        component: lazy(() =>
+          import(/* webpackChunkName: "baseList"*/ "../pages/TodoList/index.js")
+        ),
+      },
       {
         path: "/baseList",
         component: lazy(() =>
@@ -14,7 +26,6 @@ const routes = [
       },
       {
         path: "/cardList",
-        exact: true,
         component: lazy(() =>
           import(/* webpackChunkName: "CardList"*/ "../pages/CardList")
         ),

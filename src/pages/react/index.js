@@ -5,6 +5,7 @@ import routes from "./routes";
 import { renderRoutes } from "react-router-config";
 import { Suspense } from "react";
 import "antd/dist/antd.css";
+import "./index.css";
 // 由于 antd 组件的默认文案是英文，所以需要修改为中文
 // import zhCN from "antd/es/locale/zh_CN";
 // import moment from "moment";

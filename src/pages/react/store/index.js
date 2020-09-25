@@ -1,14 +1,16 @@
-import * as fp from "redux";
 import { createStore, combineReducers, applyMiddleware } from "redux";
-import thunkMiddleware from "redux-thunk";
+import thunk from "redux-thunk";
 import { baseListReducer } from "./module/baseList/reducer";
 import { cardListReducer } from "./module/cardList/reducer";
+import { layoutReducer } from "./module/RLayout";
+import { todoListReducer } from "./module/TodoList";
 
-console.log(fp, "fp");
 export default createStore(
   combineReducers({
     baseListReducer,
     cardListReducer,
+    layoutReducer,
+    todoListReducer,
   }),
-  applyMiddleware(thunkMiddleware)
+  applyMiddleware(thunk)
 );
