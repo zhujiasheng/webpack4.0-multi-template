@@ -1,4 +1,9 @@
-import { ADD_TODO_LIST, DELETE_TODO_LIST, GET_TODO_LIST } from "./types";
+import {
+  ADD_TODO_LIST,
+  DELETE_TODO_LIST,
+  GET_TODO_LIST,
+  SEARCH_TODO_LIST,
+} from "./types";
 const deaultState = {
   dataSource: [],
 };
@@ -6,7 +11,10 @@ const deaultState = {
 export const todoListReducer = (state = deaultState, action) => {
   const { type } = action;
   const newState = JSON.parse(JSON.stringify(state));
-  if (type == GET_TODO_LIST) {
+  if (type == SEARCH_TODO_LIST) {
+    newState.dataSource = action.dataSource;
+    return newState;
+  } else if (type == GET_TODO_LIST) {
     newState.dataSource = action.dataSource;
     return newState;
   } else if (type == ADD_TODO_LIST) {

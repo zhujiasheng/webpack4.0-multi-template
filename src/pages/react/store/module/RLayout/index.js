@@ -1,7 +1,7 @@
 import { RLAYOUT_CLICK } from "./types";
 const defaultState = {
   current: "/todolist",
-  routerList: ["/todolist", "/cardList", "/baseList"],
+  routerList: ["/todolist", "/hook"],
 };
 
 export const layoutReducer = (state = defaultState, action) => {
@@ -10,7 +10,8 @@ export const layoutReducer = (state = defaultState, action) => {
 
   if (type == RLAYOUT_CLICK) {
     newState.current = value;
+    return newState;
   }
 
-  return newState;
+  return state;
 };

@@ -1,6 +1,13 @@
 import { Row, Col, Button, Input, Table } from "antd";
 function TodoListUI(props) {
-  const { dataSource, addList, inputValue, setInputValue, columns } = props;
+  const {
+    dataSource,
+    addList,
+    searchList,
+    inputValue,
+    setInputValue,
+    columns,
+  } = props;
 
   return (
     <div style={{ padding: "20px" }}>
@@ -14,6 +21,7 @@ function TodoListUI(props) {
         </Col>
         <Col span={12}>
           <Button onClick={addList}>添加</Button>
+          <Button onClick={searchList}>查询</Button>
         </Col>
       </Row>
       <Table pagination={false} dataSource={dataSource} columns={columns} />

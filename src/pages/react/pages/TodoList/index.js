@@ -3,6 +3,7 @@ import { Button } from "antd";
 import { connect } from "react-redux";
 import TodoListUI from "./TodoListUI";
 import {
+  searchTodoList,
   getTodoList,
   addTodoList,
   deleteTodoList,
@@ -36,7 +37,7 @@ const getColumns = (deleteList) => {
 
 const TodoList = (props) => {
   // const currInput = React.createRef();
-  const { todoListReducer, getTodo, deleteList, addList } = props;
+  const { todoListReducer, getTodo, deleteList, addList, searchList } = props;
   const { dataSource } = todoListReducer;
   const [inputValue, setInputValue] = useState("");
 
@@ -51,6 +52,7 @@ const TodoList = (props) => {
         setInputValue={setInputValue}
         dataSource={dataSource}
         addList={() => addList(inputValue)}
+        searchList={() => searchList(inputValue, dataSource)}
         columns={getColumns(deleteList)}
       />
     </>
@@ -63,6 +65,9 @@ const mapState = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
+    searchList: (inputValue, dataSource) => {
+      searchTodoList(dispatch, inputValue, dataSource);
+    },
     addList: (inputValue) => {
       addTodoList(dispatch, inputValue);
     },

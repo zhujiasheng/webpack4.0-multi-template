@@ -5,7 +5,7 @@ const routes = [
   {
     path: "/login",
     component: lazy(() =>
-      import(/* webpackChunkName: "baseList"*/ "../pages/Login/index.js")
+      import(/* webpackChunkName: "login"*/ "../pages/Login/index.js")
     ),
   },
   {
@@ -15,19 +15,13 @@ const routes = [
       {
         path: "/todolist",
         component: lazy(() =>
-          import(/* webpackChunkName: "baseList"*/ "../pages/TodoList/index.js")
+          import(/* webpackChunkName: "todolist"*/ "../pages/TodoList/index.js")
         ),
       },
       {
-        path: "/baseList",
+        path: "/hook",
         component: lazy(() =>
-          import(/* webpackChunkName: "baseList"*/ "../pages/BaseList")
-        ),
-      },
-      {
-        path: "/cardList",
-        component: lazy(() =>
-          import(/* webpackChunkName: "CardList"*/ "../pages/CardList")
+          import(/* webpackChunkName: "hook"*/ "../pages/Hook/index.js")
         ),
       },
     ],
