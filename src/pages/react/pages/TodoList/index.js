@@ -1,74 +1,83 @@
-import { useState, useEffect } from "react";
-import { Button } from "antd";
+import * as action from "../../store/module/TodoList/action";
 import { connect } from "react-redux";
-import TodoListUI from "./TodoListUI";
-import {
-  searchTodoList,
-  getTodoList,
-  addTodoList,
-  deleteTodoList,
-} from "../../store/module/TodoList/actions";
+import { Button } from "antd";
+import { useState, useEffect } from "react";
 
-const getColumns = (deleteList) => {
-  return [
-    {
-      title: "名称",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "年龄",
-      dataIndex: "age",
-      key: "age",
-    },
-    {
-      title: "住址",
-      dataIndex: "address",
-      key: "address",
-    },
-    {
-      title: "操作",
-      render: (text, record, index) => {
-        return <Button onClick={() => deleteList(index)}>删除</Button>;
-      },
-    },
-  ];
-};
+function Hook(props) {
+  return (
+    <>
+      <FirstHook {...props} />
+      <hr />
+      <SecondHook {...props} />
+    </>
+  );
+}
 
-const TodoList = (props) => {
-  // const currInput = React.createRef();
-  const { todoListReducer, getTodo, deleteList, addList, searchList } = props;
-  const { dataSource } = todoListReducer;
+function SecondHook(props) {
+  const {
+    reducerBaseList,
+    handleClear,
+    handleQueryList,
+    handleAddList,
+  } = props;
+  const { dataSource } = reducerBaseList;
   const [inputValue, setInputValue] = useState("");
 
+  const changeInput = (e) => {
+    let v = e.target.value;
+    setInputValue(v);
+  };
+
+  const handleAddList2 = () => {
+    if (!inputValue) return;
+    handleAddList(inputValue);
+  };
+
   useEffect(() => {
-    getTodo();
+    handleQueryList();
+    return () => {};
   }, []);
 
   return (
     <>
-      <TodoListUI
-        inputValue={inputValue}
-        setInputValue={setInputValue}
-        dataSource={dataSource}
-        addList={() => addList(inputValue)}
-        searchList={() => searchList(inputValue, dataSource)}
-        columns={getColumns(deleteList)}
-      />
+      <div>
+        <input value={inputValue} onChange={changeInput} />
+        <button onClick={handleQueryList}>搜索</button>
+        <button onClick={handleAddList2}>添加</button>
+        <button onClick={handleClear}>清空</button>
+      </div>
+      <ul>
+        {dataSource.map((it) => (
+          <li>
+            name:{it.name}---age:{it.age}
+          </li>
+        ))}
+      </ul>
     </>
   );
-};
+}
+
+function FirstHook(props) {
+  const { reducerCount, handleAdd, handleDece } = props;
+  const { count } = reducerCount;
+  return (
+    <>
+      <Button onClick={() => handleAdd(10)}>+</Button>
+      <span>{count}</span>
+      <Button onClick={() => handleDece(-10)}>-</Button>
+    </>
+  );
+}
 
 const mapState = (state) => state;
-
 const mapDispatch = (dispatch) => {
   return {
-    searchList: (inputValue, dataSource) =>
-      searchTodoList(dispatch, inputValue, dataSource),
-    addList: (inputValue) => addTodoList(dispatch, inputValue),
-    deleteList: (index) => deleteTodoList(dispatch, index),
-    getTodo: () => getTodoList(dispatch),
+    handleAdd: (value) => action.handleAdd(dispatch, value),
+    handleDece: (value) => action.handleDece(dispatch, value),
+    handleQueryList: (value) => action.handleQueryList(dispatch, value),
+    handleClear: () => action.handleClear(dispatch),
+    handleAddList: (value) => action.handleAddList(dispatch, value),
   };
 };
 
-export default connect(mapState, mapDispatch)(TodoList);
+export default connect(mapState, mapDispatch)(Hook);

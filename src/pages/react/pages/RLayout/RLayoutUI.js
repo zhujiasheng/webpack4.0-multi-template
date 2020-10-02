@@ -3,8 +3,8 @@ import { Layout, Menu } from "antd";
 const { Header, Sider, Content } = Layout;
 
 function RLayoutUI(props) {
-  const { layoutReducer, route, handleMenu, history, renderRoutes } = props;
-  const { current, routerList } = layoutReducer;
+  const { route, handleMenu, history, renderRoutes, reducerLayout } = props;
+  const { current, routerList } = reducerLayout;
 
   return (
     <Layout theme="light">

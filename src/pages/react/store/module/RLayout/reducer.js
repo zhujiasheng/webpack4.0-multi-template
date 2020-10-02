@@ -4,7 +4,7 @@ const defaultState = {
   routerList: ["/todolist", "/hook"],
 };
 
-export const layoutReducer = (state = defaultState, action) => {
+export const reducerLayout = (state = defaultState, action) => {
   const { type, value } = action;
   const newState = Object.assign({}, state);
 

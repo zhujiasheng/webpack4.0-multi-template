@@ -1,12 +1,12 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
-import { layoutReducer } from "./module/RLayout";
-import { todoListReducer } from "./module/TodoList";
-
+import { reducerLayout } from "./module/RLayout/reducer";
+import { reducerCount, reducerBaseList } from "./module/TodoList/reducer";
 export default createStore(
   combineReducers({
-    layoutReducer,
-    todoListReducer,
+    reducerLayout,
+    reducerCount,
+    reducerBaseList,
   }),
   applyMiddleware(thunk)
 );
