@@ -1,12 +1,9 @@
-import { renderRoutes } from "react-router-config";
-import { useHistory } from "react-router-dom";
 import "./RLayoutUI.css";
 import { Layout, Menu } from "antd";
 const { Header, Sider, Content } = Layout;
 
 function RLayoutUI(props) {
-  const history = useHistory();
-  const { layoutReducer, route, handleMenu } = props;
+  const { layoutReducer, route, handleMenu, history, renderRoutes } = props;
   const { current, routerList } = layoutReducer;
 
   return (

@@ -13,22 +13,27 @@ const pagesDIR = "./src/pages";
 let entry = {},
   output = {},
   plugins = [],
-  _module = {};
-const files = fs.readdirSync(htmlDIR).map((it) => {
-  return it.split(".")[0];
-});
-const _VERSON = +new Date();
+  _module = {},
+  files = [];
 
+// files = fs.readdirSync(htmlDIR).map((it) => {
+//   return it.split(".")[0];
+// });
+files = ["react"];
+
+const _VERSON = +new Date();
 const _ExtractTextPlugin = new ExtractTextPlugin({
   filename: `[name].min.css?t=${_VERSON}`,
   disable: false,
 });
 
 //entry
-entry = files.reduce((curr, it, idx) => {
-  curr[it] = `${pagesDIR}/${it}/index.js`;
-  return curr;
-}, {});
+// entry = files.reduce((curr, it, idx) => {
+//   curr[it] = `${pagesDIR}/${it}/index.js`;
+//   return curr;
+// }, {});
+entry = { react: "./src/pages/react/index.js" };
+console.log(entry, "entry");
 
 //output
 output = {

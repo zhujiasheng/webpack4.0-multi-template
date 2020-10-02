@@ -7,17 +7,20 @@ export function ShowArea() {
 }
 
 export function ButtonAdd() {
-  const { dispatch } = useContext(Context);
-  return (
-    <>
-      <button onClick={() => dispatch("ADD")}>添加</button>
-    </>
-  );
+  const { setMess } = useContext(Context);
+  const addCount = () => {
+    setMess("ADD");
+  };
+  return <ButtonAddUI addCount={addCount} />;
+}
+
+function ButtonAddUI(props) {
+  return <button onClick={props.addCount}>添加</button>;
 }
 
 const getList = (timeout) => {
   return new Promise((resolve, reject) => {
-    console.log("getList-start");
+    console.log("getList-start-1");
     setTimeout(() => {
       console.log("getList-end");
       resolve();
@@ -26,15 +29,15 @@ const getList = (timeout) => {
 };
 
 export function ButtonDece() {
-  const { dispatch } = useContext(Context);
+  const { setMess } = useContext(Context);
   const deceCount = async () => {
     await getList(2000);
-    dispatch("DECE");
+    setMess("DECE");
   };
 
-  return (
-    <>
-      <button onClick={deceCount}>减少</button>
-    </>
-  );
+  return <ButtonDeceUI deceCount={deceCount} />;
+}
+
+function ButtonDeceUI(props) {
+  return <button onClick={props.deceCount}>减少</button>;
 }

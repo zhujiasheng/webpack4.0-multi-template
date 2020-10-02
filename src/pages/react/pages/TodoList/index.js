@@ -59,24 +59,15 @@ const TodoList = (props) => {
   );
 };
 
-const mapState = (state) => {
-  return state;
-};
+const mapState = (state) => state;
 
 const mapDispatch = (dispatch) => {
   return {
-    searchList: (inputValue, dataSource) => {
-      searchTodoList(dispatch, inputValue, dataSource);
-    },
-    addList: (inputValue) => {
-      addTodoList(dispatch, inputValue);
-    },
-    deleteList: (index) => {
-      deleteTodoList(dispatch, index);
-    },
-    getTodo: () => {
-      getTodoList(dispatch);
-    },
+    searchList: (inputValue, dataSource) =>
+      searchTodoList(dispatch, inputValue, dataSource),
+    addList: (inputValue) => addTodoList(dispatch, inputValue),
+    deleteList: (index) => deleteTodoList(dispatch, index),
+    getTodo: () => getTodoList(dispatch),
   };
 };
 
