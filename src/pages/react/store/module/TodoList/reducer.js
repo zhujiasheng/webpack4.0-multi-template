@@ -1,6 +1,6 @@
 import {
-  ADD,
-  DECE,
+  COUNT_ADD,
+  COUNT_DECE,
   BASELIST_SELECT,
   BASELIST_CLEAR,
   BASELIST_ADD,
@@ -13,9 +13,9 @@ export const reducerCount = (
   action
 ) => {
   switch (action.type) {
-    case ADD:
+    case COUNT_ADD:
       return { count: state.count + 1 + action.value };
-    case DECE:
+    case COUNT_DECE:
       return { count: state.count - 1 + action.value };
     default:
       return state;

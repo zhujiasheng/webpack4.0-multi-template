@@ -19,7 +19,7 @@ let entry = {},
 // files = fs.readdirSync(htmlDIR).map((it) => {
 //   return it.split(".")[0];
 // });
-files = ["react"];
+files = ["study"];
 
 const _VERSON = +new Date();
 const _ExtractTextPlugin = new ExtractTextPlugin({
@@ -32,7 +32,7 @@ const _ExtractTextPlugin = new ExtractTextPlugin({
 //   curr[it] = `${pagesDIR}/${it}/index.js`;
 //   return curr;
 // }, {});
-entry = { react: "./src/pages/react/index.js" };
+entry = { study: "./src/pages/study/index.js" };
 console.log(entry, "entry");
 
 //output

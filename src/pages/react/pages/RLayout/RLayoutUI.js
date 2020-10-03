@@ -3,7 +3,13 @@ import { Layout, Menu } from "antd";
 const { Header, Sider, Content } = Layout;
 
 function RLayoutUI(props) {
-  const { route, handleMenu, history, renderRoutes, reducerLayout } = props;
+  const {
+    route,
+    handleRLayoutMenu,
+    history,
+    renderRoutes,
+    reducerLayout,
+  } = props;
   const { current, routerList } = reducerLayout;
 
   return (
@@ -13,7 +19,7 @@ function RLayoutUI(props) {
           {routerList &&
             routerList.map((pathName, key) => (
               <Menu.Item
-                onClick={() => handleMenu(pathName, history)}
+                onClick={() => handleRLayoutMenu(pathName, history)}
                 key={pathName}
               >
                 {pathName.replace("/", "")}

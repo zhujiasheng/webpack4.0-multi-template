@@ -1,17 +1,17 @@
 import {
-  ADD,
-  DECE,
+  COUNT_ADD,
+  COUNT_DECE,
   BASELIST_CLEAR,
   BASELIST_SELECT,
   BASELIST_ADD,
 } from "./actionType";
 
 export const handleAdd = (dispatch, value) => {
-  dispatch({ type: ADD, value });
+  dispatch({ type: COUNT_ADD, value });
 };
 
 export const handleDece = (dispatch, value) => {
-  dispatch({ type: DECE, value });
+  dispatch({ type: COUNT_DECE, value });
 };
 
 export const handleQueryList = async (dispatch) => {

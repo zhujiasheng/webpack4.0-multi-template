@@ -12,7 +12,7 @@ function RLayout(props) {
 const mapState = (state) => state;
 const mapDispatch = (dispatch) => {
   return {
-    handleMenu: (pathName, history) =>
+    handleRLayoutMenu: (pathName, history) =>
       handleRLayoutMenu(dispatch, pathName, history),
   };
 };
