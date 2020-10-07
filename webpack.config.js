@@ -1,47 +1,47 @@
-const path = require("path");
-const webpack = require("webpack");
-const fs = require("fs");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const VueLoaderPlugin = require("vue-loader/lib/plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
-const compressionWebpackPlugin = require("compression-webpack-plugin");
+const path = require('path')
+const webpack = require('webpack')
+const fs = require('fs')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const compressionWebpackPlugin = require('compression-webpack-plugin')
 
-const htmlDIR = "./src/html";
-const pagesDIR = "./src/pages";
+const htmlDIR = './src/html'
+const pagesDIR = './src/pages'
 let entry = {},
   output = {},
   plugins = [],
   _module = {},
-  files = [];
+  files = []
 
 // files = fs.readdirSync(htmlDIR).map((it) => {
 //   return it.split(".")[0];
 // });
-files = ["study"];
+files = ['study']
 
-const _VERSON = +new Date();
+const _VERSON = +new Date()
 const _ExtractTextPlugin = new ExtractTextPlugin({
   filename: `[name].min.css?t=${_VERSON}`,
   disable: false,
-});
+})
 
 //entry
 // entry = files.reduce((curr, it, idx) => {
 //   curr[it] = `${pagesDIR}/${it}/index.js`;
 //   return curr;
 // }, {});
-entry = { study: "./src/pages/study/index.js" };
-console.log(entry, "entry");
+entry = { study: './src/pages/study/index.ts' }
+console.log(entry, 'entry')
 
 //output
 output = {
   filename: `[name].js?t=${_VERSON}`,
-  path: path.resolve(__dirname, "dist"),
+  path: path.resolve(__dirname, 'dist'),
   // library: `${'web'}`,
   // libraryTarget: "commonjs2"
-};
+}
 
 //plugins
 plugins = files.reduce((curr, it) => {
@@ -52,36 +52,36 @@ plugins = files.reduce((curr, it) => {
       inject: true,
       chunks: [`${it}`],
       css: [],
-      js: ["js/lodash.js", "js/react.js", "js/react-dom.js"],
-    })
-  );
-  return curr;
-}, []);
+      js: ['js/lodash.js', 'js/react.js', 'js/react-dom.js'],
+    }),
+  )
+  return curr
+}, [])
 
-plugins.push(new CleanWebpackPlugin());
-plugins.push(_ExtractTextPlugin);
-plugins.push(new VueLoaderPlugin());
+plugins.push(new CleanWebpackPlugin())
+plugins.push(_ExtractTextPlugin)
+plugins.push(new VueLoaderPlugin())
 plugins.push(
   new CopyWebpackPlugin([
     {
-      from: path.resolve(__dirname, "static"),
-      to: path.resolve(__dirname, "static"),
+      from: path.resolve(__dirname, 'static'),
+      to: path.resolve(__dirname, 'static'),
       // ignore: ['*.ts', '*.less'],
     },
     {
-      from: "./node_modules/lodash/lodash.js",
-      to: path.resolve(__dirname, "dist/js/lodash.js"),
+      from: './node_modules/lodash/lodash.js',
+      to: path.resolve(__dirname, 'dist/js/lodash.js'),
     },
     {
-      from: "./node_modules/react-dom/umd/react-dom.production.min.js",
-      to: path.resolve(__dirname, "dist/js/react-dom.js"),
+      from: './node_modules/react-dom/umd/react-dom.production.min.js',
+      to: path.resolve(__dirname, 'dist/js/react-dom.js'),
     },
     {
-      from: "./node_modules/react/umd/react.production.min.js",
-      to: path.resolve(__dirname, "dist/js/react.js"),
+      from: './node_modules/react/umd/react.production.min.js',
+      to: path.resolve(__dirname, 'dist/js/react.js'),
     },
-  ])
-);
+  ]),
+)
 
 // plugins.push(new webpack.ProvidePlugin({
 //   cloneDeep:['lodash','cloneDeep'],
@@ -91,9 +91,9 @@ plugins.push(
 
 plugins.push(
   new webpack.DefinePlugin({
-    webp: JSON.stringify("webpack"),
-  })
-);
+    webp: JSON.stringify('webpack'),
+  }),
+)
 
 // plugins.push(new compressionWebpackPlugin())
 // plugins.push(new webpack.HotModuleReplacementPlugin({
@@ -105,10 +105,10 @@ _module = {
     {
       test: /\.css$/,
       use: _ExtractTextPlugin.extract({
-        fallback: "style-loader",
+        fallback: 'style-loader',
         use: [
           {
-            loader: "css-loader",
+            loader: 'css-loader',
             options: {
               //关键代码 抽离对应css
               modules: false,
@@ -120,32 +120,32 @@ _module = {
     {
       test: /\.scss$/,
       use: _ExtractTextPlugin.extract({
-        fallback: "style-loader",
+        fallback: 'style-loader',
         use: [
           {
-            loader: "css-loader",
+            loader: 'css-loader',
             options: {
               //关键代码 抽离对应css
               modules: false,
             },
           },
-          "sass-loader",
+          'sass-loader',
         ],
       }),
     },
     {
       test: /\.less$/,
       use: _ExtractTextPlugin.extract({
-        fallback: "style-loader",
+        fallback: 'style-loader',
         use: [
           {
-            loader: "css-loader",
+            loader: 'css-loader',
             options: {
               //关键代码 抽离对应css
               modules: false,
             },
           },
-          "less-loader",
+          'less-loader',
         ],
       }),
     },
@@ -153,42 +153,47 @@ _module = {
       test: /\.(js)|(jsx)|(ts)$/,
       exclude: /(node_modules)/,
       use: {
-        loader: "babel-loader",
+        loader: 'babel-loader',
       },
     },
     {
       test: /\.vue$/,
       use: [
         {
-          loader: "vue-loader",
+          loader: 'vue-loader',
         },
       ],
     },
+    {
+      test: /\.(ts)|(tsx)$/,
+      use: 'awesome-typescript-loader',
+      exclude: /node_modules/,
+    },
   ],
-};
+}
 
 const config = {
   entry,
   output,
   module: _module,
   plugins,
-};
+}
 
 config.externals = {
-  lodash: "lodash",
-  "react-dom": "ReactDOM",
-  react: "React",
-};
+  lodash: 'lodash',
+  'react-dom': 'ReactDOM',
+  react: 'React',
+}
 
 config.resolve = {
-  extensions: [".ts", ".tsx", ".js", ".jsx", ".vue", ".less", ".scss", ".css"],
+  extensions: ['.ts', '.tsx', '.js', '.jsx', '.vue', '.less', '.scss', '.css'],
   alias: {
-    "@": path.resolve(__dirname, "src/"),
-    "@components": path.resolve(__dirname, "src/components"),
-    "@utils": path.resolve(__dirname, "src/utils"),
-    "@pages": path.resolve(__dirname, "src/pages"),
+    '@': path.resolve(__dirname, 'src/'),
+    '@components': path.resolve(__dirname, 'src/components'),
+    '@utils': path.resolve(__dirname, 'src/utils'),
+    '@pages': path.resolve(__dirname, 'src/pages'),
   },
-};
+}
 
 // config.resolve = {
 //   extensions: ['.js','jsx','.vue','.json'],
@@ -236,10 +241,10 @@ config.resolve = {
 
 config.devServer = {
   contentBase: `${htmlDIR}/`,
-  host: "127.0.0.1",
-  port: "8888",
+  host: '127.0.0.1',
+  port: '8888',
   hot: true,
   compress: true,
-};
-config.mode = "development";
-module.exports = config;
+}
+config.mode = 'development'
+module.exports = config

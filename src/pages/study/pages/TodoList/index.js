@@ -11,6 +11,7 @@ function TodoList(props) {
       <Button onClick={handleAdd}>+</Button>
       <span>{count}</span>
       <Button onClick={handleDece}>-</Button>
+      <div></div>
     </>
   )
 }

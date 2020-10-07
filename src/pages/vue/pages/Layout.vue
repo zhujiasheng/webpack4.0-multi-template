@@ -20,13 +20,13 @@
 
 <script>
 export default {
-  name: "Layout",
+  name: 'Layout',
   data() {
     return {
-      current: ["baseCard"],
-    };
+      current: [],
+    }
   },
-};
+}
 </script>
 
 <style>
