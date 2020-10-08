@@ -7,9 +7,19 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 // const compressionWebpackPlugin = require('compression-webpack-plugin')
+const config = require('../config')
+const devConfig = require('../config/dev.env')
+const prodConfig = require('../config/prod.env')
+
+// console.log(process.env.NODE_ENV == prodConfig.NODE_ENV, 'kk')
+// console.log(process.env.NODE_ENV == 'production', 'kj')
+
+function isProd(value) {
+  return process.env.NODE_ENV == (prodConfig.NODE_ENV || value)
+}
 
 function readFile() {
-  return fs.readdirSync($glob.htmlDIR).map(it => {
+  return fs.readdirSync(config.htmlDIR).map(it => {
     return it.split('.')[0]
   })
 }
@@ -17,18 +27,15 @@ function readFile() {
 function entryConfig() {
   const files = readFile()
   return files.reduce((curr, it, idx) => {
-    curr[it] = `${$glob.pagesDIR}/${it}/index.js`
+    curr[it] = `${config.projectDIR}/${it}/index.js`
     return curr
   }, {})
 }
 
 function outputConfig(t) {
-  return {
+  return Object.assign({}, config.build().output, {
     filename: `[name].js?t=${t}`,
-    path: path.resolve(__dirname, 'dist'),
-    // library: `${'web'}`,
-    // libraryTarget: "commonjs2"
-  }
+  })
 }
 
 function pluginsConfig() {
@@ -36,7 +43,7 @@ function pluginsConfig() {
   const _htmlWebpackPlugin = files.reduce((curr, it) => {
     curr.push(
       new HtmlWebpackPlugin({
-        template: `${$glob.htmlDIR}/${it}.html`,
+        template: `${config.htmlDIR}/${it}.html`,
         filename: `${it}.html`,
         inject: true,
         chunks: [`${it}`],
@@ -57,19 +64,20 @@ function pluginsConfig() {
     },
     {
       from: './node_modules/lodash/lodash.js',
-      to: path.resolve(__dirname, 'dist/js/lodash.js'),
+      to: path.resolve(__dirname, '../dist/js/lodash.js'),
     },
     {
       from: './node_modules/react-dom/umd/react-dom.production.min.js',
-      to: path.resolve(__dirname, 'dist/js/react-dom.js'),
+      to: path.resolve(__dirname, '../dist/js/react-dom.js'),
     },
     {
       from: './node_modules/react/umd/react.production.min.js',
-      to: path.resolve(__dirname, 'dist/js/react.js'),
+      to: path.resolve(__dirname, '../dist/js/react.js'),
     },
   ])
+
   const _definePlugin = new webpack.DefinePlugin({
-    webp: JSON.stringify('webpack'),
+    webp: JSON.stringify(isProd() ? prodConfig : devConfig),
   })
 
   // new compressionWebpackPlugin()
@@ -220,36 +228,27 @@ function resolveConfig() {
 }
 
 function devServerConfig() {
-  return {
-    contentBase: `${$glob.htmlDIR}/`,
-    host: '127.0.0.1',
-    port: '8888',
-    hot: true,
-    compress: true,
-  }
+  return config.dev()
 }
 
 function modeConfig() {
-  return 'development'
+  return isProd() ? 'production' : 'development'
 }
 
 const $glob = (function () {
-  const _version = +new Date()
   const _extractTextPlugin = new ExtractTextPlugin({
-    filename: `[name].min.css?t=${_version}`,
+    filename: `[name].min.css?t=${config.ft}`,
     disable: false,
   })
 
   return {
-    htmlDIR: './src/html',
-    pagesDIR: './src/pages',
     extractTextPlugin: _extractTextPlugin,
-    version: _version,
   }
 })()
 
-const config = (function () {
+const web = (function () {
   return {
+    context: path.resolve(__dirname, '../'),
     mode: modeConfig(),
     entry: entryConfig(),
     output: outputConfig(),
@@ -261,4 +260,4 @@ const config = (function () {
   }
 })()
 
-module.exports = config
+module.exports = web

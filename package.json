@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --progress --profile --colors",
-    "build": "webpack --progress --profile --colors --config  webpack.config.js"
+    "start": "webpack-dev-server --progress --profile --colors --config build/webpack.config.js",
+    "start:prod":"cross-env NODE_ENV=production webpack-dev-server --progress --profile --colors --config build/webpack.config.js",
+    "build": "webpack --progress --profile --colors --config  build/webpack.config.js"
   },
   "repository": {
     "type": "git",

@@ -4,6 +4,6 @@
 
 <script>
 export default {
-  name: "CardList",
-};
+  name: 'CardList',
+}
 </script>
