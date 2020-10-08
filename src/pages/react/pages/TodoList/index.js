@@ -1,27 +1,28 @@
-import * as action from "../../store/module/TodoList/action";
-import { connect } from "react-redux";
-import FirstUI from "./FirstUI";
-import SecondUI from "./SecondUI";
+import { connect } from 'react-redux'
+import * as action from '../../store/modules/todolist/action'
+import { Button } from 'antd'
 
-function Hook(props) {
+function TodoList(props) {
+  const { handleAdd, handleDece, reducerTodoList } = props
+  const { count } = reducerTodoList
+
   return (
     <>
-      <FirstUI {...props} />
-      <hr />
-      <SecondUI {...props} />
+      <Button onClick={handleAdd}>+</Button>
+      <span>{count}</span>
+      <Button onClick={handleDece}>-</Button>
+      <div></div>
     </>
-  );
+  )
 }
 
-const mapState = (state) => state;
+const mapState = (state) => state
+
 const mapDispatch = (dispatch) => {
   return {
-    handleAdd: (value) => action.handleAdd(dispatch, value),
-    handleDece: (value) => action.handleDece(dispatch, value),
-    handleQueryList: (value) => action.handleQueryList(dispatch, value),
-    handleClear: () => action.handleClear(dispatch),
-    handleAddList: (value) => action.handleAddList(dispatch, value),
-  };
-};
+    handleAdd: () => action.handleAdd(dispatch),
+    handleDece: () => action.handleDece(dispatch)
+  }
+}
 
-export default connect(mapState, mapDispatch)(Hook);
+export default connect(mapState, mapDispatch)(TodoList)

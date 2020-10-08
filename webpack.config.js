@@ -6,63 +6,50 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const compressionWebpackPlugin = require('compression-webpack-plugin')
+// const compressionWebpackPlugin = require('compression-webpack-plugin')
 
-const htmlDIR = './src/html'
-const pagesDIR = './src/pages'
-let entry = {},
-  output = {},
-  plugins = [],
-  _module = {},
-  files = []
-
-// files = fs.readdirSync(htmlDIR).map((it) => {
-//   return it.split(".")[0];
-// });
-files = ['study']
-
-const _VERSON = +new Date()
-const _ExtractTextPlugin = new ExtractTextPlugin({
-  filename: `[name].min.css?t=${_VERSON}`,
-  disable: false,
-})
-
-//entry
-// entry = files.reduce((curr, it, idx) => {
-//   curr[it] = `${pagesDIR}/${it}/index.js`;
-//   return curr;
-// }, {});
-entry = { study: './src/pages/study/index.ts' }
-console.log(entry, 'entry')
-
-//output
-output = {
-  filename: `[name].js?t=${_VERSON}`,
-  path: path.resolve(__dirname, 'dist'),
-  // library: `${'web'}`,
-  // libraryTarget: "commonjs2"
+function readFile() {
+  return fs.readdirSync($glob.htmlDIR).map(it => {
+    return it.split('.')[0]
+  })
 }
 
-//plugins
-plugins = files.reduce((curr, it) => {
-  curr.push(
-    new HtmlWebpackPlugin({
-      template: `${htmlDIR}/${it}.html`,
-      filename: `${it}.html`,
-      inject: true,
-      chunks: [`${it}`],
-      css: [],
-      js: ['js/lodash.js', 'js/react.js', 'js/react-dom.js'],
-    }),
-  )
-  return curr
-}, [])
+function entryConfig() {
+  const files = readFile()
+  return files.reduce((curr, it, idx) => {
+    curr[it] = `${$glob.pagesDIR}/${it}/index.js`
+    return curr
+  }, {})
+}
 
-plugins.push(new CleanWebpackPlugin())
-plugins.push(_ExtractTextPlugin)
-plugins.push(new VueLoaderPlugin())
-plugins.push(
-  new CopyWebpackPlugin([
+function outputConfig(t) {
+  return {
+    filename: `[name].js?t=${t}`,
+    path: path.resolve(__dirname, 'dist'),
+    // library: `${'web'}`,
+    // libraryTarget: "commonjs2"
+  }
+}
+
+function pluginsConfig() {
+  const files = readFile()
+  const _htmlWebpackPlugin = files.reduce((curr, it) => {
+    curr.push(
+      new HtmlWebpackPlugin({
+        template: `${$glob.htmlDIR}/${it}.html`,
+        filename: `${it}.html`,
+        inject: true,
+        chunks: [`${it}`],
+        css: [],
+        js: ['js/lodash.js', 'js/react.js', 'js/react-dom.js'],
+      }),
+    )
+    return curr
+  }, [])
+
+  const _cleanWebpackPlugin = new CleanWebpackPlugin()
+  const _vueLoaderPlugin = new VueLoaderPlugin()
+  const _copyWebpackPlugin = new CopyWebpackPlugin([
     {
       from: path.resolve(__dirname, 'static'),
       to: path.resolve(__dirname, 'static'),
@@ -80,171 +67,198 @@ plugins.push(
       from: './node_modules/react/umd/react.production.min.js',
       to: path.resolve(__dirname, 'dist/js/react.js'),
     },
-  ]),
-)
-
-// plugins.push(new webpack.ProvidePlugin({
-//   cloneDeep:['lodash','cloneDeep'],
-//   React:['react'],
-//   ReactDOM:['react-dom']
-// }))
-
-plugins.push(
-  new webpack.DefinePlugin({
+  ])
+  const _definePlugin = new webpack.DefinePlugin({
     webp: JSON.stringify('webpack'),
-  }),
-)
+  })
 
-// plugins.push(new compressionWebpackPlugin())
-// plugins.push(new webpack.HotModuleReplacementPlugin({
-//   // Options...
-// }))
-//module
-_module = {
-  rules: [
-    {
-      test: /\.css$/,
-      use: _ExtractTextPlugin.extract({
-        fallback: 'style-loader',
-        use: [
-          {
-            loader: 'css-loader',
-            options: {
-              //关键代码 抽离对应css
-              modules: false,
+  // new compressionWebpackPlugin()
+  //new webpack.HotModuleReplacementPlugin
+
+  return [
+    ..._htmlWebpackPlugin,
+    ...[$glob.extractTextPlugin, _cleanWebpackPlugin, _vueLoaderPlugin, _copyWebpackPlugin, _definePlugin],
+  ]
+}
+
+function moduleConfig() {
+  return {
+    rules: [
+      {
+        test: /\.css$/,
+        use: $glob.extractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                //关键代码 抽离对应css
+                modules: false,
+              },
             },
-          },
-        ],
-      }),
-    },
-    {
-      test: /\.scss$/,
-      use: _ExtractTextPlugin.extract({
-        fallback: 'style-loader',
-        use: [
-          {
-            loader: 'css-loader',
-            options: {
-              //关键代码 抽离对应css
-              modules: false,
-            },
-          },
-          'sass-loader',
-        ],
-      }),
-    },
-    {
-      test: /\.less$/,
-      use: _ExtractTextPlugin.extract({
-        fallback: 'style-loader',
-        use: [
-          {
-            loader: 'css-loader',
-            options: {
-              //关键代码 抽离对应css
-              modules: false,
-            },
-          },
-          'less-loader',
-        ],
-      }),
-    },
-    {
-      test: /\.(js)|(jsx)|(ts)$/,
-      exclude: /(node_modules)/,
-      use: {
-        loader: 'babel-loader',
+          ],
+        }),
       },
-    },
-    {
-      test: /\.vue$/,
-      use: [
-        {
-          loader: 'vue-loader',
+      {
+        test: /\.scss$/,
+        use: $glob.extractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                //关键代码 抽离对应css
+                modules: false,
+              },
+            },
+            'sass-loader',
+          ],
+        }),
+      },
+      {
+        test: /\.less$/,
+        use: $glob.extractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                //关键代码 抽离对应css
+                modules: false,
+              },
+            },
+            'less-loader',
+          ],
+        }),
+      },
+      {
+        test: /\.(js)|(jsx)|(ts)$/,
+        exclude: /(node_modules)/,
+        use: {
+          loader: 'babel-loader',
         },
-      ],
+      },
+      {
+        test: /\.vue$/,
+        use: [
+          {
+            loader: 'vue-loader',
+          },
+        ],
+      },
+      {
+        test: /\.(ts)|(tsx)$/,
+        use: 'awesome-typescript-loader',
+        exclude: /node_modules/,
+      },
+    ],
+  }
+}
+
+function externalsConfig() {
+  return {
+    lodash: 'lodash',
+    'react-dom': 'ReactDOM',
+    react: 'React',
+  }
+}
+
+function resolveConfig() {
+  // config.resolve = {
+  //   extensions: ['.js','jsx','.vue','.json'],
+  //   alias: {
+  //     '@': resolve('src'),
+  //     '@/components': resolve('src/components'),
+  //     '@/pages': resolve('src/pages')
+  //   }
+  // }
+  // config.optimization = {
+  //   splitChunks:{
+  //     chunks:'all',
+  //     name:true,
+  //     cacheGroups:{
+  //       lodash:{
+  //         name:'chunks-lodash',
+  //         test: (module) => {
+  //           return /lodash/.test(module.context)
+  //         },
+  //         chunks:'initial',
+  //         priority:12
+  //       }
+  //     }
+  //   }
+  // }
+  // config.optimization = {
+  //   splitChunks:{
+  //     chunks:'all',//async 对异步代码分割 all 对同步和异步代码分割
+  //     minSize: 300000,//当引入的模块大于30kb才会做代码分割
+  //     maxSize: 0,//当引入的模块大于maxSize时，会尝试对引入的模块进行二次拆分，一般不用配置
+  //     minChunks: 1,//当一个模块被至少引入1次，才会做代码分割
+  //     maxAsyncRequests: 5,//当引入模块10个时，只会将前5个模块进行打包
+  //     maxInitialRequests: 3,//入口文件引入的模块如果超过3个，只会将前3个模块做代码分割
+  //     automaticNameDelimiter: '~',//文件连接符
+  // name: true,//拆分块的名称，让cacheGroups里面的名字有效
+  //     cacheGroups:{
+  //       com:{
+  //         filename:'[name].js',
+  //         priority:2,//有限权，当一个模块都符合cacheGroups分组条件，将按照优先权进行分组，priority值越大，优先权越高
+  //         // reuseExistingChunk:true
+  //       },
+  //     }//对符合代码拆分的模块进行一个分类
+  //   }
+  // }
+
+  return {
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.vue', '.less', '.scss', '.css'],
+    alias: {
+      '@': path.resolve(__dirname, 'src/'),
+      '@components': path.resolve(__dirname, 'src/components'),
+      '@utils': path.resolve(__dirname, 'src/utils'),
+      '@pages': path.resolve(__dirname, 'src/pages'),
     },
-    {
-      test: /\.(ts)|(tsx)$/,
-      use: 'awesome-typescript-loader',
-      exclude: /node_modules/,
-    },
-  ],
+  }
 }
 
-const config = {
-  entry,
-  output,
-  module: _module,
-  plugins,
+function devServerConfig() {
+  return {
+    contentBase: `${$glob.htmlDIR}/`,
+    host: '127.0.0.1',
+    port: '8888',
+    hot: true,
+    compress: true,
+  }
 }
 
-config.externals = {
-  lodash: 'lodash',
-  'react-dom': 'ReactDOM',
-  react: 'React',
+function modeConfig() {
+  return 'development'
 }
 
-config.resolve = {
-  extensions: ['.ts', '.tsx', '.js', '.jsx', '.vue', '.less', '.scss', '.css'],
-  alias: {
-    '@': path.resolve(__dirname, 'src/'),
-    '@components': path.resolve(__dirname, 'src/components'),
-    '@utils': path.resolve(__dirname, 'src/utils'),
-    '@pages': path.resolve(__dirname, 'src/pages'),
-  },
-}
+const $glob = (function () {
+  const _version = +new Date()
+  const _extractTextPlugin = new ExtractTextPlugin({
+    filename: `[name].min.css?t=${_version}`,
+    disable: false,
+  })
 
-// config.resolve = {
-//   extensions: ['.js','jsx','.vue','.json'],
-//   alias: {
-//     '@': resolve('src'),
-//     '@/components': resolve('src/components'),
-//     '@/pages': resolve('src/pages')
-//   }
-// }
-// config.optimization = {
-//   splitChunks:{
-//     chunks:'all',
-//     name:true,
-//     cacheGroups:{
-//       lodash:{
-//         name:'chunks-lodash',
-//         test: (module) => {
-//           return /lodash/.test(module.context)
-//         },
-//         chunks:'initial',
-//         priority:12
-//       }
-//     }
-//   }
-// }
-// config.optimization = {
-//   splitChunks:{
-//     chunks:'all',//async 对异步代码分割 all 对同步和异步代码分割
-//     minSize: 300000,//当引入的模块大于30kb才会做代码分割
-//     maxSize: 0,//当引入的模块大于maxSize时，会尝试对引入的模块进行二次拆分，一般不用配置
-//     minChunks: 1,//当一个模块被至少引入1次，才会做代码分割
-//     maxAsyncRequests: 5,//当引入模块10个时，只会将前5个模块进行打包
-//     maxInitialRequests: 3,//入口文件引入的模块如果超过3个，只会将前3个模块做代码分割
-//     automaticNameDelimiter: '~',//文件连接符
-// name: true,//拆分块的名称，让cacheGroups里面的名字有效
-//     cacheGroups:{
-//       com:{
-//         filename:'[name].js',
-//         priority:2,//有限权，当一个模块都符合cacheGroups分组条件，将按照优先权进行分组，priority值越大，优先权越高
-//         // reuseExistingChunk:true
-//       },
-//     }//对符合代码拆分的模块进行一个分类
-//   }
-// }
+  return {
+    htmlDIR: './src/html',
+    pagesDIR: './src/pages',
+    extractTextPlugin: _extractTextPlugin,
+    version: _version,
+  }
+})()
 
-config.devServer = {
-  contentBase: `${htmlDIR}/`,
-  host: '127.0.0.1',
-  port: '8888',
-  hot: true,
-  compress: true,
-}
-config.mode = 'development'
+const config = (function () {
+  return {
+    mode: modeConfig(),
+    entry: entryConfig(),
+    output: outputConfig(),
+    module: moduleConfig(),
+    plugins: pluginsConfig(),
+    externals: externalsConfig(),
+    resolve: resolveConfig(),
+    devServer: devServerConfig(),
+  }
+})()
+
 module.exports = config

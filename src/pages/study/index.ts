@@ -1,1 +1,0 @@
-import './typescripts/index.ts'

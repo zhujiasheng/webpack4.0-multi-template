@@ -8,7 +8,6 @@ const Second = () => {
   return (
     <>
       <ul>
-        <div></div>
         <li>
           <Link to={`${url}/a`}>second-a &nbsp;</Link>
           <Link to={`${url}/b`}>second-b &nbsp;</Link>
